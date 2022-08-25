@@ -3,6 +3,7 @@ import { useUser } from "@auth0/nextjs-auth0";
 import CreateOrganizationForm from "../forms/createOrganization";
 import Link from "next/link";
 import { useState } from "react";
+import CreateUserForm from "../forms/createUser";
 
 const Home: NextPage = () => {
   const [organizations, setOrganizations] = useState<{
@@ -26,7 +27,7 @@ const Home: NextPage = () => {
     }
   };
 
-  console.log("org..", organizations);
+  // console.log("org..", organizations);
 
   if (user) {
     return (
@@ -60,11 +61,30 @@ const Home: NextPage = () => {
         <div>
           {organizations &&
             organizations.data.map((item) => {
-              return <div key={item.id}>{item.display_name}</div>;
+              return (
+                <div className="py-4" key={item.id}>
+                  <div>ID: {item.id}</div>
+                  <div>Name: {item.display_name}</div>
+                </div>
+              );
             })}
         </div>
+        {/* <div>
+          <button
+            type="button"
+            onClick={viewConnections}
+            className="py-2 px-8 border-2 text-white rounded-md font-normal bg-pink-500 my-6"
+          >
+            View Connections
+          </button>
+        </div> */}
+        <hr />
         <div>
           <CreateOrganizationForm />
+        </div>
+        <hr />
+        <div>
+          <CreateUserForm />
         </div>
         <div>
           <Link href="/api/auth/logout">

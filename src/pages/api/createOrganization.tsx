@@ -13,7 +13,18 @@ const createOrganization = async (
   try {
     const { name, displayName } = req.body as ICreateOrganization;
     const managementApiAccessToken = await getManagementApiAccesstoken();
-    console.log("organization..", name, displayName);
+
+    const connectionResponse = await fetch(
+      "http://localhost:3000/api/getConnections"
+    );
+    const connectionData = await connectionResponse.json();
+    const usernamePasswordAuth = connectionData.data.filter((item: any) => {
+      return item.name === "Username-Password-Authentication";
+    });
+    const connectionId = usernamePasswordAuth.map((item: any) => {
+      return item.id;
+    });
+    const usernamePasswordAuthId = connectionId[0];
     const response = await fetch(
       `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/organizations`,
       {
@@ -25,15 +36,12 @@ const createOrganization = async (
         body: JSON.stringify({
           name: name,
           display_name: displayName,
-          // branding: {
-          //   logo_url: "",
-          //   colors: {
-          //     primary: "",
-          //     page_background: "",
-          //   },
-          // },
-          // metadata: {},
-          // enabled_connections: ["object"],
+          enabled_connections: [
+            {
+              connection_id: usernamePasswordAuthId,
+              assign_membership_on_login: true,
+            },
+          ],
         }),
       }
     );

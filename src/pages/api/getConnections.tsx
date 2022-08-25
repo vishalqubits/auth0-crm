@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import getManagementApiAccesstoken from "./getManagementApiAccesstoken";
 
-const getOrganization = async (req: NextApiRequest, res: NextApiResponse) => {
+const getConnections = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const managementApiAccessToken = await getManagementApiAccesstoken();
     const response = await fetch(
-      `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/organizations`,
+      `${process.env.AUTH0_ISSUER_BASE_URL}/api/v2/connections`,
       {
         method: "GET",
         headers: {
@@ -22,4 +22,4 @@ const getOrganization = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 };
 
-export default getOrganization;
+export default getConnections;
